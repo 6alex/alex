@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	 http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+     	 http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+     	 http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<context:component-scan base-package="com.wen">
+	  <!-- 防止重复扫描controller注解 -->
+	  <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	<!--数据源的管理  -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+   		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+   		<property name="url" value="jdbc:mysql://localhost:3306/ssm"></property>
+   		<property name="username" value="root"></property>
+   		<property name="password" value="123"></property>
+   	</bean>
+   	
+   	<!--spring 管理sqlSessionFactory：mybaits的配置文件和数据源  -->
+   	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+   	  <!-- 批量配置映射文件 -->
+   	  <property name="mapperLocations" value="classpath:com/wen/dao/*.xml"></property>
+   	  <property name="configLocation" value="classpath:mybatisConfig.xml"></property>
+   	  <property name="dataSource" ref="dataSource"></property>
+   	</bean>
+   	
+   	
+   	<!-- 推荐使用批量代理：bean节点id默认是实现接口的首字母小写 -->
+   	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+   	  <property name="basePackage" value="com.wen.dao"></property>
+   	  <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+   	</bean>
+   	
+   	<!-- 事务管理 -->
+   	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+   		<property name="dataSource" ref="dataSource"></property>
+   	</bean>
+   	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+   	  <tx:attributes><tx:method name=""/>
+   	    <tx:method name="query*" isolation="DEFAULT" propagation="REQUIRED" read-only="true"/>
+   	    <tx:method name="*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+   	  </tx:attributes>
+   	</tx:advice>
+   	<aop:config>
+   	   <aop:pointcut expression="execution(* com.wen.service.*.*(..))" id="point"/>
+   	   <aop:advisor advice-ref="txAdvice" pointcut-ref="point"/>
+   	</aop:config>
+   	
+</beans>

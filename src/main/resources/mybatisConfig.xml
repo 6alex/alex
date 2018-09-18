@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 引入静态properties文件 -->
+    <!-- <properties resource="data.properties"></properties> -->
+    <settings>
+       <!-- lazyLoadingEnabled:懒加载默认false，aggressiveLazyLoading：积极加载，默认true -->
+      <setting name="lazyLoadingEnabled" value="true"/>
+      <setting name="aggressiveLazyLoading" value="false"/>
+      <!--启用二级缓存  -->
+      <setting name="cacheEnabled" value="true"/>
+    </settings>
+    <!-- 为自定义类型起别名 -->
+    <typeAliases>
+      <!-- <typeAlias type="com.offcn3.po.User" alias="user"/> -->
+      <!-- 批量设置别名,默认别名为类名或者类名的首字母小写 -->
+      <package name="com.wen.po"/>
+    </typeAliases>
+</configuration>

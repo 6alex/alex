@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>alex</display-name>
+	<welcome-file-list>
+		<welcome-file>views/login.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<!-- springmvc -->
+	<!-- 编码过滤器 -->
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- springmvc配置 -->
+	<!--请求分发器，默认查找的springmvc配置文件的名字为 servlet-name+“-”+servlet -->
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:springmvc.xml</param-value>
+		</init-param>
+		<!--文件上传 -->
+		<!-- <multipart-config>
+			<max-file-size>5242880</max-file-size> 单个文件最大大小：5MB
+			<max-request-size>20971520</max-request-size>  所有文件最大大小：20MB
+			<file-size-threshold>0</file-size-threshold>   超过这个大小直接存硬盘，而不是内存
+		</multipart-config> -->
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<!-- 请求格式 -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+
+	<!-- Spring -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<!-- classpath:代表的是classes包下的所有文件，classpath*:当前项目的所有文件 -->
+		<param-value>classpath:beans.xml</param-value>
+	</context-param>
+</web-app>
