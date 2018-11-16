@@ -18,4 +18,7 @@
       <!-- 批量设置别名,默认别名为类名或者类名的首字母小写 -->
       <package name="com.wen.po"/>
     </typeAliases>
+    <plugins>
+    	<plugin interceptor="com.wen.utils.MyInterceptor"></plugin>
+    </plugins>
 </configuration>
